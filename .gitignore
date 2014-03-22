@@ -41,6 +41,12 @@ local.properties
 *.user
 *.sln.docstates
 
+# Packages
+packages/
+
+#CEF dll
+*.dll
+
 # Build results
 
 [Dd]ebug/
