@@ -1,8 +1,11 @@
 # CefSharp.WPF.Sample #
 This project is a simple sample for [**CefSharp**](https://github.com/cefsharp/CefSharp "CefSharp").**WPF**.
 
+- *CefSharp.Settings* and CEF initization.
+- Page Loading
+- Simple *IDownloadHandler* implementation.
 
-This sample requires .Net 4.5 and [**ReactiveUI**](http://www.reactiveui.net/ "ReactiveUI").
+
 
 > # CefSharp - Embedded Chromium for .NET
 > 
