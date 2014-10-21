@@ -1,19 +1,16 @@
-﻿using CefSharp.WPF.Sample.Util;
-using GalaSoft.MvvmLight.Command;
-using ReactiveUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Threading;
+using CefSharp.WPF.Sample.Util;
+using GalaSoft.MvvmLight.Command;
 
 namespace CefSharp.WPF.Sample.ViewModels
 {
-    public class CefBrowserViewModel : ReactiveObject, IRequestHandler, ILoadHandler
+    public class CefBrowserViewModel : INotifyPropertyChanged, IRequestHandler, ILoadHandler
     {
         static CefBrowserViewModel()
         {
@@ -79,7 +76,7 @@ namespace CefSharp.WPF.Sample.ViewModels
         public string Url
         {
             get { return _url; }
-            set { this.RaiseAndSetIfChanged(ref _url, value); }
+            set { this.Set(ref _url, value); }
         }
 
         private bool _isLoading;
@@ -87,7 +84,7 @@ namespace CefSharp.WPF.Sample.ViewModels
         public bool IsLoading
         {
             get { return _isLoading; }
-            set { this.RaiseAndSetIfChanged(ref _isLoading, value);
+            set { this.Set(ref _isLoading, value);
             (this.GoCommand as RelayCommand).RaiseCanExecuteChanged();
             }
         }
@@ -97,7 +94,7 @@ namespace CefSharp.WPF.Sample.ViewModels
         public bool IsBrowserInitialized
         {
             get { return _isBrowserInitialized; }
-            set { this.RaiseAndSetIfChanged(ref _isBrowserInitialized, value); }
+            set { this.Set(ref _isBrowserInitialized, value); }
         }
 
         public ICommand GoCommand { get; private set; }
@@ -180,5 +177,31 @@ namespace CefSharp.WPF.Sample.ViewModels
         } 
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public bool Set<TProperty>(
+            ref TProperty backingField,
+            TProperty newValue,
+            [CallerMemberName] string propertyName = null)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                throw new ArgumentNullException("propertyName");
+
+            if (EqualityComparer<TProperty>.Default.Equals(backingField, newValue))
+                return false;
+
+            backingField = newValue;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }
